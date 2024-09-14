@@ -116,8 +116,8 @@ const Tasks: React.FC = () => {
                                 <TaskItem
                                     key={task.id}
                                     task={task}
-                                    onDelete={deleteTask}
                                     onComplete={toggleComplete}
+                                    onDelete={deleteTask}
                                     onEdit={editTask}
                                 />
                             ))}

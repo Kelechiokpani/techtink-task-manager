@@ -1,26 +1,29 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FC } from "react";
 import { TextField, Box } from "@mui/material";
 
-const SearchForm = ({ onSearch }) => {
-  const [input, setInput] = useState("");
+interface SearchFormProps {
+  onSearch: (value: string) => void;
+}
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!input) return;
-    onSearch(input);
-    setInput("");
+const SearchForm: FC<SearchFormProps> = ({ onSearch }) => {
+  const [input, setInput] = useState<string>("");
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInput(value);
+    onSearch(value);
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} display="flex" gap={2} mt={2}>
-      <TextField
-        label="Search"
-        variant="outlined"
-        fullWidth
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-    </Box>
+      <Box component="form" display="flex" gap={2} mt={2}>
+        <TextField
+            label="Search"
+            variant="outlined"
+            fullWidth
+            value={input}
+            onChange={handleChange}
+        />
+      </Box>
   );
 };
 
