@@ -14,8 +14,14 @@ const SearchForm: FC<SearchFormProps> = ({ onSearch }) => {
     onSearch(value);
   };
 
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+    }
+
+
   return (
-      <Box component="form" display="flex" gap={2} mt={2}>
+      <Box component="form" onSubmit={handleSubmit} display="flex" gap={2} mt={2}>
         <TextField
             label="Search"
             variant="outlined"

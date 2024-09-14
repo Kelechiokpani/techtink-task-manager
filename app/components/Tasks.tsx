@@ -14,6 +14,7 @@ import EditTask from "@/app/components/Tasks/EditTask";
 const Tasks: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [search, setSearch] = useState<Task[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>("");
     const [modal, setModal] = useState<boolean>(false);
     const [taskUndo, setTaskUndo] = useState<number | null>(null);
 
@@ -29,6 +30,9 @@ const Tasks: React.FC = () => {
 
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
+        if (searchQuery) {
+            handleSearch(searchQuery);
+        }
     }, [tasks]);
 
     const addTask = (taskText: string) => {
@@ -40,16 +44,28 @@ const Tasks: React.FC = () => {
         setTasks(tasks.filter((task) => task.id !== taskId));
     };
 
-    const toggleComplete = (taskId: number) => {
-        setTasks(
-            tasks.map((task) =>
-                task.id === taskId
-                    ? { ...task, completed: !task.completed, completedAt: task.completed ? null : new Date().toISOString() }
-                    : task
-            )
-        );
-    };
+    // const toggleComplete = (taskId: number) => {
+    //     setTasks(
+    //         tasks.map((task) =>
+    //             task.id === taskId
+    //                 ? { ...task, completed: !task.completed, completedAt: task.completed ? null : new Date().toISOString() }
+    //                 : task
+    //         )
+    //     );
+    // };
+    //
 
+    const toggleComplete = (taskId: number) => {
+        const updatedTasks = tasks.map((task) =>
+            task.id === taskId
+                ? { ...task, completed: !task.completed, completedAt: task.completed ? null : new Date().toISOString() }
+                : task
+        );
+        setTasks(updatedTasks);
+        if (searchQuery) {
+            handleSearch(searchQuery);
+        }
+    };
 
     const editTask = (taskId: number) => {
         const task = tasks.find((task) => task.id === taskId) || null;
@@ -63,6 +79,7 @@ const Tasks: React.FC = () => {
 
 
     const handleSearch = (query: string) => {
+        setSearchQuery(query);
         if (query) {
             setSearch(tasks.filter((task) => task.text.toLowerCase().includes(query.toLowerCase())));
         } else {
